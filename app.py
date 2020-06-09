@@ -1,5 +1,6 @@
 from flask import Flask, render_template, url_for
 from flask_sqlalchemy import SQLAlchemy
+from webscrape_ticker import num_2020_killings
 
 
 app = Flask(__name__)
@@ -22,7 +23,7 @@ def home():
     # black_data = db.query.filter_by(race='B').all()
     # white_data = db.query.filter_by(race='W').all()
     # other_data = db.query.filter_by(race='O').all()
-    hello = 'hello'
+    killings_count = num_2020_killings
     return render_template('index.html', **locals())
 
 if __name__ == '__main__':

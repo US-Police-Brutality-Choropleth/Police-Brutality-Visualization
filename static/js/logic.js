@@ -80,4 +80,4 @@ d3.json(geoData, function(data) {
 
 });
 
-console.log(hello)
+console.log(killings)
