@@ -22,6 +22,7 @@ def home():
     # black_data = db.query.filter_by(race='B').all()
     # white_data = db.query.filter_by(race='W').all()
     # other_data = db.query.filter_by(race='O').all()
+    hello = 'hello'
     return render_template('index.html', **locals())
 
 if __name__ == '__main__':
