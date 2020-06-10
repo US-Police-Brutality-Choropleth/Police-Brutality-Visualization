@@ -79,5 +79,3 @@ d3.json(geoData, function(data) {
   legend.addTo(myMap);
 
 });
-
-console.log(killings)
