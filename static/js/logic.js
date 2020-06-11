@@ -1,56 +1,122 @@
-// Creating map object
-var myMap = L.map("map", {
-  center: [34.0522, -118.2437],
-  zoom: 8
+// Create two maps
+var myMap1 = L.map("map1", {
+  center: [39.83, -98.58],
+  zoom: 4
 });
 
-// Adding tile layer
-L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+var myMap2 = L.map("map2", {
+  center: [39.83, -98.58],
+  zoom: 4
+});
+
+// Adding tile layer to maps
+var tileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
   attribution: "© <a href='https://www.mapbox.com/about/maps/'>Mapbox</a> © <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> <strong><a href='https://www.mapbox.com/map-feedback/' target='_blank'>Improve this map</a></strong>",
   tileSize: 512,
   maxZoom: 18,
   zoomOffset: -1,
   id: "mapbox/streets-v11",
   accessToken: API_KEY
-}).addTo(myMap);
-
-// Load in geojson data
-var geoData = 'static/data/gz_2010_us_040_00_500k.json'
-d3.json(geoData, Data => {
-L.geoJson(Data).addTo(myMap)
 })
-var geojson;
+
+tileLayer.addTo(myMap1)
+tileLayer.addTo(myMap2)
+
+// Grab stateCodes from GeoJson file
+var geoData = 'static/data/gz_2010_us_040_00_500k.json'
+var stateCodes = []
+d3.json(geoData, data => {
+  // Add stateCodes from GeoJson data
+  data.features.forEach(feature => {
+    stateCodes.push(parseInt(feature.properties.STATE))
+  })
+})
+
+// Function that loads data from flask for each race
+var races = ['White', 'Black', 'Hispanic', 'Asian',]
+var stateCodesAndKillings = {'White': [],'Black': [], 'Hispanic': [], 'Asian': []}
+races.forEach(race => {
+  d3.json(`/killings/${race}`, data => {
+    stateCodes.forEach(stateCode => {
+      var stateCodeKillings = 0
+      data.results.forEach(killing => {
+        if(killing.State_Code === stateCode) {
+          stateCodeKillings += 1
+        }
+      })
+      stateCodesAndKillings[race].push(stateCodeKillings)
+    })
+  })
+})
+  
+d3.json(geoData, data => {
+  // Inject number of killings for each state as a key under features.properties in the GeoJson file
+  data.features.forEach(feature => {
+    stateCodesAndKillings.Black.forEach(CodeAndKillings => {
+      feature.properties.killings = CodeAndKillings
+    })
+  })
+  console.log(data.features[0])
+
+  // Add outline of states from GeoJson data
+  geojson = L.choropleth(data, {
+
+    // Define what  property in the features to use
+    valueProperty: "killings",
+
+    // Set color scale
+    scale: ["#ffffb2", "#b10026"],
+
+    // Number of breaks in step range
+    steps: 10,
+
+    // q for quartile, e for equidistant, k for k-means
+    mode: "q",
+    style: {
+      // Border color
+      color: "#fff",
+      weight: 1,
+      fillOpacity: 0.8
+    },
+
+    // Binding a pop-up to each layer
+    onEachFeature: function (feature, layer) {
+      layer.bindPopup("State " + feature.properties.NAME + "<br>Number Of Killings:<br>" +
+        "$" + feature.properties.killings);
+    }
+  }).addTo(myMap1);
+})
 
 // Grab data with d3
 // d3.json(geoData, function(data) {
 
 //   // Create a new choropleth layer
-//   geojson = L.choropleth(data, {
+  // geojson = L.choropleth(data, {
 
-//     // Define what  property in the features to use
-//     valueProperty: "MHI2016",
+  //   // Define what  property in the features to use
+  //   valueProperty: "MHI2016",
 
-//     // Set color scale
-//     scale: ["#ffffb2", "#b10026"],
+  //   // Set color scale
+  //   scale: ["#ffffb2", "#b10026"],
 
-//     // Number of breaks in step range
-//     steps: 10,
+  //   // Number of breaks in step range
+  //   steps: 10,
 
-//     // q for quartile, e for equidistant, k for k-means
-//     mode: "q",
-//     style: {
-//       // Border color
-//       color: "#fff",
-//       weight: 1,
-//       fillOpacity: 0.8
-//     },
+  //   // q for quartile, e for equidistant, k for k-means
+  //   mode: "q",
+  //   style: {
+  //     // Border color
+  //     color: "#fff",
+  //     weight: 1,
+  //     fillOpacity: 0.8
+  //   },
 
-//     // Binding a pop-up to each layer
-//     onEachFeature: function(feature, layer) {
-//       layer.bindPopup("Zip Code: " + feature.properties.ZIP + "<br>Median Household Income:<br>" +
-//         "$" + feature.properties.MHI2016);
-//     }
-//   }).addTo(myMap);
+  //   // Binding a pop-up to each layer
+  //   onEachFeature: function(feature, layer) {
+  //     layer.bindPopup("Zip Code: " + feature.properties.ZIP + "<br>Median Household Income:<br>" +
+  //       "$" + feature.properties.MHI2016);
+  //   }
+  // }).addTo(myMap);
 
 //   // Set up the legend
 //   var legend = L.control({ position: "bottomright" });

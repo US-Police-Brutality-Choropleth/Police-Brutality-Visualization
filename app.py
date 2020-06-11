@@ -22,7 +22,7 @@ class PoliceData(db.Model):
     armed = db.Column(db.String(80))
     
     def __repr__(self):
-        return f"({self.raceethnicity},{self.state},{self.latitude},{self.longitude},{self.armed})"
+        return f"({self.raceethnicity},{self.state_fp},{self.latitude},{self.longitude},{self.armed})"
 
 #Create home route that returns index.html and allows javascript to access database data
 @app.route('/')
@@ -32,55 +32,17 @@ def home():
     return render_template('index.html', **locals())
 
 
-#Create callable routes which can be accessed in javascript logic.js file. Add jsonify data to each endpoint
-@app.route('/blackData')
-def blackData():
-    data = {'results': []}
-    fields = ('race','state','latitude','longitude','armed')
-    black_data = PoliceData.query.filter_by(raceethnicity='Black').all()
-    for row in black_data:
-        data['results'].append({fields[0]:row.raceethnicity,fields[1]:row.state,fields[2]:row.latitude,fields[3]:row.longitude,fields[4]:row.armed,})
-    return jsonify(data)
-
-
-
+#Create callable route which can be accessed in javascript logic.js file. Add jsonify data to each endpoint
 @app.route('/killings/<race>')
 def killings(race):
     data = {'results': []}
-    fields = ('race','state','latitude','longitude','armed')
-    data = PoliceData.query.filter_by(raceethnicity=race).all()
-    data['results'].append({fields[0]:row.raceethnicity,fields[1]:row.state,fields[2]:row.latitude,fields[3]:row.longitude,fields[4]:row.armed,})
-    return jsonify(data)
+    fields = ('race','State_Code','latitude','longitude','armed')
+    QueryData = PoliceData.query.filter_by(raceethnicity=race).all()
+    for row in QueryData:
+        data['results'].append({fields[0]:row.raceethnicity, fields[1]:row.state_fp, fields[2]:row.latitude, fields[3]:row.longitude, fields[4]:row.armed})
 
-@app.route('/whiteData')
-def whiteData():
-    data = {'results': []}
-    fields = ('race','state','latitude','longitude','armed')
-    white_data = PoliceData.query.filter_by(raceethnicity='White').all()
-    for row in white_data:
-        data['results'].append({fields[0]:row.raceethnicity,fields[1]:row.state,fields[2]:row.latitude,fields[3]:row.longitude,fields[4]:row.armed,})
-    
     return jsonify(data)
-
-@app.route('/hispanicData')
-def hispanicData():
-    data = {'results': []}
-    fields = ('race','state','latitude','longitude','armed')
-    hispanic_data = PoliceData.query.filter_by(raceethnicity='Hispanic/Latino').all()
-    for row in hispanic_data:
-        data['results'].append({fields[0]:row.raceethnicity,fields[1]:row.state,fields[2]:row.latitude,fields[3]:row.longitude,fields[4]:row.armed,})
-    
-    return jsonify(data)
-
-@app.route('/asianData')
-def asianData():
-    data = {'results': []}
-    fields = ('race','state','latitude','longitude','armed')
-    asian_data = PoliceData.query.filter_by(raceethnicity='Asian/Pacific Islander').all()
-    for row in asian_data:
-        data['results'].append({fields[0]:row.raceethnicity,fields[1]:row.state,fields[2]:row.latitude,fields[3]:row.longitude,fields[4]:row.armed,})
-    
-    return jsonify(data)
+  
 
 if __name__ == '__main__':
     app.run(debug=True)

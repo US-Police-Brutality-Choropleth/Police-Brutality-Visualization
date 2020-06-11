@@ -3,7 +3,11 @@ body {
   margin: 0;
 }
 
-#map {
+#map1 {
+  width: 800px;
+  height: 500px;
+}
+#map2 {
   width: 800px;
   height: 500px;
 }
