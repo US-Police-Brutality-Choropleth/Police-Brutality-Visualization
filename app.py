@@ -1,4 +1,4 @@
-from flask import Flask, render_template, url_for, jsonify
+from flask import Flask, render_template, url_for, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from webscrape_ticker import num_2020_killings
 
@@ -8,7 +8,6 @@ app = Flask(__name__)
 #Initialize connection to database and bind declarative base to an engine
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///killings_db.sqlite'
 db = SQLAlchemy(app)
-
 
 class PoliceData(db.Model):
     __tablename__ = 'police_killings'
@@ -41,7 +40,16 @@ def blackData():
     black_data = PoliceData.query.filter_by(raceethnicity='Black').all()
     for row in black_data:
         data['results'].append({fields[0]:row.raceethnicity,fields[1]:row.state,fields[2]:row.latitude,fields[3]:row.longitude,fields[4]:row.armed,})
-    
+    return jsonify(data)
+
+
+
+@app.route('/killings/<race>')
+def killings(race):
+    data = {'results': []}
+    fields = ('race','state','latitude','longitude','armed')
+    data = PoliceData.query.filter_by(raceethnicity=race).all()
+    data['results'].append({fields[0]:row.raceethnicity,fields[1]:row.state,fields[2]:row.latitude,fields[3]:row.longitude,fields[4]:row.armed,})
     return jsonify(data)
 
 @app.route('/whiteData')
