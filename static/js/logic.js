@@ -52,10 +52,10 @@ races.forEach(race => {
 d3.json(geoData, data => {
   // Inject number of killings for each state as a key under features.properties in the GeoJson file
   data.features.forEach(feature => {
-    stateCodesAndKillings.Black.forEach(CodeAndKillings => {
-      feature.properties.killings = CodeAndKillings
+    for (i = 0; i < stateCodesAndKillings.Black.length; i++) {
+      data.features[i].properties.killings = stateCodesAndKillings.Black[i]
+      }
     })
-  })
   console.log(data.features[0])
 
   // Add outline of states from GeoJson data
@@ -68,7 +68,7 @@ d3.json(geoData, data => {
     scale: ["#ffffb2", "#b10026"],
 
     // Number of breaks in step range
-    steps: 10,
+    steps: 5,
 
     // q for quartile, e for equidistant, k for k-means
     mode: "q",
@@ -81,8 +81,7 @@ d3.json(geoData, data => {
 
     // Binding a pop-up to each layer
     onEachFeature: function (feature, layer) {
-      layer.bindPopup("State " + feature.properties.NAME + "<br>Number Of Killings:<br>" +
-        "$" + feature.properties.killings);
+      layer.bindPopup(`<h1>${feature.properties.NAME}</h1>` + `<br><h6>Number Of Killings:${feature.properties.killings}</h6>`);
     }
   }).addTo(myMap1);
 })
