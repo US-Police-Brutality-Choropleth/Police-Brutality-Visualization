@@ -34,7 +34,7 @@
     <div class="navigation">
       <nav class="navbar navbar-expand-lg navbar-light">
         <img src="{{  url_for('static', filename = 'images/fist.png')}}" width="40" height="40" alt="">
-        <a class="navbar-brand" href="choro.html">Police Brutality</a>
+        <a class="navbar-brand" href="{{ url_for('choropleth')}}">Police Brutality</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
           aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -57,9 +57,9 @@
     </div>
         <!-- left end -->
         <!-- right -->
-        <div class="row">
+        <div class="container">
           <!-- left -->
-          <div class="col  col-md-4">
+          <div class="row">
             <div class="content">
               <div class="card" style="width: 15rem;">
                 <img src="/static/Images/Editorial-Graphic.png" class="card-img-top" alt="...">
@@ -71,12 +71,8 @@
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-      </div>
-      {% block scripts %}
-      {% endblock %}
+          {% block scripts %}
+          {% endblock %}
         ​
         <!-- Start of footer -->
         <br>

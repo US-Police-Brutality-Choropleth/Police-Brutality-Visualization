@@ -1,6 +1,6 @@
 function makeMyMap(idCSS) {
   var myMap = L.map(idCSS, {
-    center: [39.83, -98.58],
+    center: [33.25, -98.58],
     zoom: 4
   });
   return myMap
@@ -34,6 +34,66 @@ function getStateNames(data) {
   return stateNames
 }
 
+function addChoropleth(data,map) {
+  // Add outline of states from GeoJson data
+  geojson = L.choropleth(data, {
+
+    // Define what  property in the features to use
+    valueProperty: "killings",
+
+    // Set color scale
+    scale: ["#F6803B", "#733E1F"],
+
+    // Number of breaks in step range
+    steps: 10,
+
+    // q for quartile, e for equidistant, k for k-means
+    mode: "q",
+    style: {
+      // Border color
+      color: "#fff",
+      weight: 1.2,
+      fillOpacity: 0.7
+    },
+
+    // Binding a pop-up to each layer
+    onEachFeature: function (feature, layer) {
+      layer.bindPopup(`<h1>${feature.properties.NAME}</h1>` + `<br><h6>Number Of Killings:${feature.properties.killings}</h6>`);
+    }
+  }).addTo(map);
+  return geojson
+}
+
+function addLegend(geojson,map) {
+  // Set up the legend
+  var legend = L.control({ position: "bottomright" });
+  legend.onAdd = function () {
+    var div = L.DomUtil.create("div", "info legend");
+    var limits = geojson.options.limits;
+    var colors = geojson.options.colors;
+    var labels = [];
+
+    // Add min & max
+    var legendInfo = "<h2>Number of killings</h2>" +
+      "<div class=\"labels\">" +
+      "<div class=\"min\">" + limits[0] + "</div>" +
+      "<div class=\"max\">" + limits[limits.length - 1] + "</div>" +
+      "</div>";
+
+    div.innerHTML = legendInfo;
+
+    limits.forEach(function (limit, index) {
+      labels.push("<li style=\"background-color: " + colors[index] + "\"></li>");
+    });
+
+    div.innerHTML += "<ul>" + labels.join("") + "</ul>";
+    return div;
+  };
+
+  // Adding legend to the map
+  legend.addTo(map);
+}
+
 // Function which will make choropleth map
 function createChoropleth(race) {
 
@@ -65,33 +125,8 @@ function createChoropleth(race) {
         data.features[i].properties.killings = stateNamesAndKillings[i]
         }
       })
-
-    // Add outline of states from GeoJson data
-    geojson = L.choropleth(data, {
-
-      // Define what  property in the features to use
-      valueProperty: "killings",
-
-      // Set color scale
-      scale: ["#F6803B","#733E1F"],
-
-      // Number of breaks in step range
-      steps: 10,
-
-      // q for quartile, e for equidistant, k for k-means
-      mode: "q",
-      style: {
-        // Border color
-        color: "#fff",
-        weight: 1.5,
-        fillOpacity: 0.7
-      },
-
-      // Binding a pop-up to each layer
-      onEachFeature: function (feature, layer) {
-        layer.bindPopup(`<h1>${feature.properties.NAME}</h1>` + `<br><h6>Number Of Killings:${feature.properties.killings}</h6>`);
-        }
-      }).addTo(myMap1);
+    var geojson = addChoropleth(data,myMap1)
+    addLegend(geojson,myMap1)
     })   
   })
 }

@@ -27,6 +27,8 @@ html {
   background: rgba(255, 255, 255, 0.8);
   border-radius: 5px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  height: 50%;
+  width: 80%;
 }
 
 .legend ul {
@@ -52,6 +54,10 @@ html {
 }
 
 h1 {
+  text-align: center;
+}
+
+h2 {
   text-align: center;
 }
 
