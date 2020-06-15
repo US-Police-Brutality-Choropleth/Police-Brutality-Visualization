@@ -57,6 +57,12 @@ def markers():
     killings_count = num_2020_killings
     return render_template('markers.html', **locals())
 
+@app.route('/pie')
+def pie():
+    
+    killings_count = num_2020_killings
+    return render_template('pie.html', **locals())
+
 
 #Create callable route which can be accessed in javascript logic.js file. Add jsonify data to each endpoint
 @app.route('/AllKillings/<race>')

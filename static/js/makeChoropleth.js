@@ -73,7 +73,7 @@ function createChoropleth(race) {
       valueProperty: "killings",
 
       // Set color scale
-      scale: ["#ffffb2", "#b10026"],
+      scale: ["#F6803B","#733E1F"],
 
       // Number of breaks in step range
       steps: 10,
@@ -83,8 +83,8 @@ function createChoropleth(race) {
       style: {
         // Border color
         color: "#fff",
-        weight: 1,
-        fillOpacity: 0.8
+        weight: 1.5,
+        fillOpacity: 0.7
       },
 
       // Binding a pop-up to each layer

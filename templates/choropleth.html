@@ -1,4 +1,24 @@
 {% extends "layout.html" %}
 {% block scripts %}
+<!-- The div where we will inject our map -->
+<div id="map1" class='leaflet-container leaflet-fade-anim leaflet-grab leaflet-touch-drag' style='position: relative;'></div>
 <script type="text/javascript" src="{{ url_for('static', filename='js/makeChoropleth.js') }}"></script>
 {% endblock %}
+<!-- start of main body -->
+<div class="container">
+    <br>
+    <div class="row">
+        <!-- left -->
+        <div class="col  col-md-8">
+            <div class="content">
+                <br>
+                <h2>2015 Police Killings</h2>
+                <hr>
+                <div id="map1" class='leaflet-container leaflet-fade-anim leaflet-grab leaflet-touch-drag'
+                    style='position: relative;' href="./static/choro.html">
+                </div>
+                <p>insert short caption here </p>
+                <br>
+                <hr>
+            </div>
+        </div>
