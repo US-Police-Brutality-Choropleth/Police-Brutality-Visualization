@@ -7,7 +7,7 @@ function makeMyMap(idCSS) {
 }
 
 // Create map
-var myMap2 = makeMyMap("map2");
+var myMap1 = makeMyMap("map1");
 
 // Adding tile layer to maps
 var tileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
@@ -17,19 +17,19 @@ var tileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/
   accessToken: API_KEY
 })
 
-tileLayer.addTo(myMap2)
+tileLayer.addTo(myMap1)
 
 // Function that loads data from flask for each race
 var races = ['White', 'Black', 'Hispanic', 'Asian',]
 races.forEach(race => {
-  d3.json(`/killings/${race}`, data => {
+  d3.json(`/2015killings/${race}`, data => {
     myResults = data.results 
 
     for (var i=0;i<myResults.length;i++){
       var location = myResults[i];
       var lat=location.latitude;
       var long=location.longitude;
-      L.marker([lat,long]).addTo(myMap2)
+      L.marker([lat,long]).addTo(myMap1)
       }
   })
 });

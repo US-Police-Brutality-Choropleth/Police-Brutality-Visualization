@@ -12,7 +12,7 @@ var myMap1 = makeMyMap("map1");
 var geoData = 'static/data/gz_2010_us_040_00_500k.json';
 
 
-// Adding tile layer to maps
+// function to add tile layer to maps
 function createTile(map) {
   var tileLayer = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -24,35 +24,45 @@ function createTile(map) {
   tileLayer.addTo(map)
 }
 
+// Function to loop through GeoJson and grab state full names and push values to list
+function getStateNames(data) {
+  var stateNames = []
+    data.features.forEach(feature => {
+      stateNames.push(feature.properties.NAME)
+    })
+    
+  return stateNames
+}
+
+// Function which will make choropleth map
 function createChoropleth(race) {
 
   d3.json(geoData, data => {
+    //Clear current map html
     d3.select('map1').html('')
+    //Add tile layer to empty map
     createTile(myMap1)
-    //Grab State Codes from GeoJson
-    var stateCodes = []
-    data.features.forEach(feature => {
-      stateCodes.push(parseInt(feature.properties.STATE))
-    })
-    
-    var stateCodesAndKillings = []
+    //Get StateCodes from GeoJson and save to variable
+    var stateNames = getStateNames(data)
+    //Create empty list which will store the number of killings for each state
+    var stateNamesAndKillings = []
     
     //Call flask endpoint of specific race to get data
-    d3.json(`/killings/${race}`, raceData => {
-      //Loop over GeoJson state codes and count the number of killings for each state and store in variable 'stateCodesAndKillings'
-      stateCodes.forEach(stateCode => {
-        var stateCodeKillings = 0
+    d3.json(`/AllKillings/${race}`, raceData => {
+      //Loop over GeoJson state codes and count the number of killings for each state and push to list 'stateNamesAndKillings'
+      stateNames.forEach(stateName => {
+        var stateNameAndKillings = 0
         raceData.results.forEach(killing => {
-          if(killing.State_Code === stateCode) {
-            stateCodeKillings += 1
+          if(killing.full_state === stateName) {
+            stateNameAndKillings += 1
           }
         })
-        stateCodesAndKillings.push(stateCodeKillings)
+        stateNamesAndKillings.push(stateNameAndKillings)
       })
     // Inject number of killings for each state as a key under features.properties in the GeoJson data
     data.features.forEach(feature => {
-      for (i = 0; i < stateCodesAndKillings.length; i++) {
-        data.features[i].properties.killings = stateCodesAndKillings[i]
+      for (i = 0; i < stateNamesAndKillings.length; i++) {
+        data.features[i].properties.killings = stateNamesAndKillings[i]
         }
       })
 
