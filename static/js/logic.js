@@ -63,7 +63,7 @@ function createChoropleth(race) {
       valueProperty: "killings",
 
       // Set color scale
-      scale: ["#ffffb2", "#b10026"],
+      scale: ["#733E1F", "#F6803B"],
 
       // Number of breaks in step range
       steps: 10,
