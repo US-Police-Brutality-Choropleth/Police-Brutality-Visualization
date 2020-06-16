@@ -5,12 +5,10 @@ function makeMyMap(idCSS) {
   });
   return myMap
 }
-
-// Create map
 var myMap1 = makeMyMap("map1");
+createTile(myMap1);
 
 var geoData = 'static/data/gz_2010_us_040_00_500k.json';
-
 
 // function to add tile layer to maps
 function createTile(map) {
@@ -96,12 +94,7 @@ function addLegend(geojson,map) {
 
 // Function which will make choropleth map
 function createChoropleth(race) {
-
   d3.json(geoData, data => {
-    //Clear current map html
-    d3.select('map1').html('')
-    //Add tile layer to empty map
-    createTile(myMap1)
     //Get StateCodes from GeoJson and save to variable
     var stateNames = getStateNames(data)
     //Create empty list which will store the number of killings for each state
@@ -111,24 +104,47 @@ function createChoropleth(race) {
     d3.json(`/AllKillings/${race}`, raceData => {
       //Loop over GeoJson state codes and count the number of killings for each state and push to list 'stateNamesAndKillings'
       stateNames.forEach(stateName => {
-        var stateNameAndKillings = 0
+        var stateNameAndKillings = 0;
         raceData.results.forEach(killing => {
           if(killing.full_state === stateName) {
             stateNameAndKillings += 1
           }
         })
-        stateNamesAndKillings.push(stateNameAndKillings)
-      })
+        stateNamesAndKillings.push(stateNameAndKillings);
+      });
     // Inject number of killings for each state as a key under features.properties in the GeoJson data
     data.features.forEach(feature => {
       for (i = 0; i < stateNamesAndKillings.length; i++) {
         data.features[i].properties.killings = stateNamesAndKillings[i]
         }
-      })
-    var geojson = addChoropleth(data,myMap1)
-    addLegend(geojson,myMap1)
+      });
+    var geojson = addChoropleth(data,myMap1);
+    addLegend(geojson,myMap1);
     })   
   })
 }
 
-createChoropleth('Black')
+function optionChanged(race){
+  //Clear current map html and legend
+  myMap1.off();
+  myMap1.remove();
+  myMap1 = makeMyMap("map1");
+  createTile(myMap1);
+  //Create new map
+  createChoropleth(race);
+}
+
+function initDash() {
+  //Create Dropdown menu
+  var races = ['Black','Asian','White','Hispanic']
+  d3.select('#selDataset')
+  .selectAll('option')
+  .data(races)
+  .enter()
+  .append('option')
+  .text(race => race);
+  //Show choropleth map for black incidents
+  createChoropleth('Black');
+}
+
+initDash()

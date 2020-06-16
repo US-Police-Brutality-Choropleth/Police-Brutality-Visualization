@@ -29,7 +29,14 @@ races.forEach(race => {
       var location = myResults[i];
       var lat=location.latitude;
       var long=location.longitude;
-      L.marker([lat,long]).addTo(myMap1)
+      var state=location.state;
+      var race= location.race;
+      L.marker([lat,long]).bindPopup(`<h1>Lat=${lat}</h1>`+
+      `<h2>Long=${long}</h2>`+
+      `<h3>State=${state}</h3>`+
+      `<h4>Race=${race}</h4>` +
+      `<img src="https://media.torchbox.com/original_images/blm.jpeg" height="25px" width="25px">`)
+      .addTo(myMap1)
       }
   })
 });
