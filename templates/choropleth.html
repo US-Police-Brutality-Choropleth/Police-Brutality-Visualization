@@ -2,7 +2,8 @@
 {% block scripts %}
 <!-- The div where we will inject our map -->
     <!-- left -->
-        <div class="content">
+    <div class="col  col-md-8">
+        <div id=choro class="content">
             <h2>2015 - Present Police Killings</h2>
             <hr>
             <div id="map1" class='leaflet-container leaflet-fade-anim leaflet-grab leaflet-touch-drag'
@@ -11,10 +12,12 @@
             <p>insert short caption here </p>
             <hr>
         </div>
-        <div class="well">
-            <h5>Select Race</h5>
-            <select id="selDataset" onchange="optionChanged(this.value)"></select>
+            <div class="well">
+                <h5>Select Race</h5>
+                <select id="selDataset" onchange="optionChanged(this.value)"></select>
+            </div>
         </div>
+    </div>
     </div>
 </div>
 <script type="text/javascript" src="{{ url_for('static', filename='js/makeChoropleth.js') }}"></script>
