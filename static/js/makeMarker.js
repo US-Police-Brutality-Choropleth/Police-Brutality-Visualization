@@ -37,12 +37,12 @@ var overlays = {
 };
 
 // Create a control for our layers, add our overlay layers to it
-L.control.layers(null, overlays).addTo(myMap);
+L.control.layers(null, overlays,{collapsed:false}).addTo(myMap);
 
 var icons = {
   White: L.icon({
     iconUrl:'static/Images/trump.png',
-    iconSize: [40,40]
+    iconSize: [80,55]
   }),
   Black: L.icon({
     iconUrl:'static/Images/dave.png',
