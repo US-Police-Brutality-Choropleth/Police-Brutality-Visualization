@@ -41,7 +41,7 @@ L.control.layers(null, overlays,{collapsed:false}).addTo(myMap);
 
 var icons = {
   White: L.icon({
-    iconUrl:'static/Images/trump.png',
+    iconUrl:'static/Images/cheeto.png',
     iconSize: [80,55]
   }),
   Black: L.icon({
@@ -49,7 +49,7 @@ var icons = {
     iconSize: [80,80]
   }),
   Asian: L.icon({
-    iconUrl:'static/Images/jackie.png',
+    iconUrl:'static/Images/jackieC.png',
     iconSize: [100,100]
   }),
   Hispanic: L.icon({
