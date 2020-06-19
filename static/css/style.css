@@ -137,15 +137,11 @@ div.footer{
   bottom: 550px;
   left:300px;
 }
-.pie-plot{
-  position: relative;
-  bottom: 600px;
-  left:400px;
-}
+
 
 #Titlep{
   position: relative;
-  bottom: 517px;
+  bottom: 550px;
   left:400px;
   background-color: white;
   width: 750px;
@@ -153,8 +149,8 @@ div.footer{
 }
 
 #selection{
-  position: relative;
-  bottom:590px;
+  position: inherit;
+  bottom:1196px;
   left:150px;
   border: 5px;
   border-color: black;
@@ -196,6 +192,7 @@ div.footer{
     position: relative;
     right:200px
 }
+
 
 .navbar{
     max-height: 50px; 
