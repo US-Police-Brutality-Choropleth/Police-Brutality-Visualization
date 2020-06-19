@@ -12,6 +12,9 @@
         canvas {
             display: block;
         }
+        .first-class{
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
     </style>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
@@ -19,6 +22,8 @@
 
 <body>
     <script src="https://threejs.org/build/three.js"></script>
+        <h1 class="first-class" align="center">Police Killings in the U.S.A. </h1>
+        <br>
     <script>
         //SCENE
         var scene = new THREE.Scene();
@@ -39,9 +44,9 @@
 
         //RENDER
         //creating our canvas with a renderer 
-        var renderer = new THREE.WebGLRenderer({ alpha: true });
+        var renderer = new THREE.WebGLRenderer({alpha:true});
         //size of canvas
-        renderer.setSize(window.innerWidth * 0.99, window.innerHeight * 0.9);
+        renderer.setSize(window.innerWidth * 0.99, window.innerHeight * 0.84);
         //adding canvas to DOM 
         document.body.appendChild(renderer.domElement);
 
