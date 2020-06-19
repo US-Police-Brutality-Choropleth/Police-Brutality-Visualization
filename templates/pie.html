@@ -1,11 +1,15 @@
 {% extends "layout.html" %}
 {% block scripts %}
-    <h1 class = 'plot-title'>Race Percentages Pie Chart</h1>
-    <h5>Select Pie Chart</h5>
-    <select id="selDataset" onchange="optionChanged(this.value)"></select>
-    <div class = pie-plot>
-        <img src = "{{ url_for('static', filename='Images/pie_plots/race_pie.png')}}">
+<div class="col  col-md-8">
+    <div id=Titlep>
+        <h1 class = 'plot-title'>Race Percentages Pie Chart</h1>
     </div>
+    <div id=selection>
+    <h5>Select Pie Chart</h5>
+        <select id="selDataset" onchange="optionChanged(this.value)"></select>
+    </div>
+    <div class = pie-plot>
+        <img src = "{{ url_for('static', filename='Images/pie_plots/race_pie.png')}}" width="750" >
     </div>
 </div>
 <script type="text/javascript" src="{{ url_for('static', filename='js/pie.js') }}"></script>
