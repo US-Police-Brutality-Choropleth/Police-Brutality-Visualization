@@ -130,12 +130,14 @@ div.footer{
   position: relative;
   bottom: 550px;
   left:300px;
+  width:850px;
 }
 
 #marker{
   position: relative;
   bottom: 550px;
   left:300px;
+  width: 850px;
 }
 
 
@@ -144,7 +146,7 @@ div.footer{
   bottom: 550px;
   left:400px;
   background-color: white;
-  width: 750px;
+  width: 700px;
   padding: 10px;
 }
 
